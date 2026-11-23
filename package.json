@@ -33,16 +33,15 @@
       }
     ],
     "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
-      "artifactName": "RetroAchievements-OBS-Tracker-Studio-Setup-${version}.${ext}"
-    },
+  "target": [
+    {
+      "target": "nsis",
+      "arch": ["x64"]
+    }
+  ],
+  "artifactName": "RetroAchievements-OBS-Tracker-Studio-Setup-${version}.${ext}"
+},
+"publish": null,
     "nsis": {
       "oneClick": false,
       "perMachine": false,
