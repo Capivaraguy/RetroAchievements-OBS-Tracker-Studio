@@ -1,8 +1,12 @@
 # RetroAchievements OBS Tracker Studio
 
-Windows desktop wrapper for the existing RetroAchievements OBS Tracker Studio v1.0.2.
+This is an Electron wrapper for RetroAchievements OBS Tracker Studio v1.0.2, a tracker tool for Retroachievements games that you're currently playing to show on your stream.
 
-The desktop app opens the existing settings interface in an Electron window and silently manages the local PowerShell HTTP server required by the tracker. The OBS overlay remains a normal local Browser Source.
+It's completely local and meant to use the OBS Browser overlay source.
+
+[image1.png]
+
+[image2.png]
 
 ## For users
 
