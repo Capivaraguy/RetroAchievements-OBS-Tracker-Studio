@@ -18,35 +18,6 @@ It's completely local and meant to use the OBS Browser overlay source.
 
 Keep Tracker Studio open while OBS uses the overlay. Closing Tracker Studio stops its local server.
 
-## Build the Windows installer
-
-Requirements: Windows 10/11, Node.js 22 or newer, and npm.
-
-```powershell
-npm install
-npm run dist
-```
-
-The installer is written to `dist/`.
-
-For local development:
-
-```powershell
-npm start
-```
-
-## Publish on GitHub
-
-1. Create a GitHub repository and push this project.
-2. Create and push a version tag:
-
-```bash
-git tag v1.0.2
-git push origin v1.0.2
-```
-
-3. The included GitHub Actions workflow builds the Windows x64 installer and attaches it to a GitHub Release. You can also run the workflow manually from the Actions tab; that produces a downloadable workflow artifact.
-
 ## Data and privacy
 
 - The RetroAchievements API key is stored in the current Windows user's application data directory, not in the installation folder or repository.
