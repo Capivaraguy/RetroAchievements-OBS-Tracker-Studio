@@ -4,9 +4,9 @@ This is an Electron wrapper for RetroAchievements OBS Tracker Studio v1.0.2, a t
 
 It's completely local and meant to use the OBS Browser overlay source.
 
-[image1.png]
+![Example 1](/image.png)
 
-[image2.png]
+![Example 2](/image-2.png)
 
 ## For users
 
