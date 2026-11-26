@@ -1,0 +1,252 @@
+* { box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  min-width: 280px;
+  min-height: 200px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: transparent !important;
+  color: #fff;
+  font-family: var(--ra-font-family, Arial, Helvetica, sans-serif);
+  font-synthesis: none;
+}
+
+.overlay {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
+.game-header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex: 0 0 auto;
+}
+
+.game-icon {
+  flex: 0 0 auto;
+  width: 96px;
+  height: 96px;
+  min-width: 96px;
+  min-height: 96px;
+  max-width: 96px;
+  max-height: 96px;
+  object-fit: contain;
+  border: 2px solid var(--ra-gameIconBorder-color, #ffffff);
+  background: transparent;
+}
+.game-icon[hidden] { display: none; }
+
+.game-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 96px;
+  padding: 2px 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.game-title {
+  color: var(--ra-gameTitle-color, #ffffff);
+  font-size: var(--ra-gameTitle-size, 26px);
+  font-weight: 700;
+  line-height: 1.22;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  -webkit-text-stroke: 3px #000;
+  paint-order: stroke fill;
+}
+
+.game-meta {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.console, .progress {
+  font-weight: 700;
+  line-height: 1.25;
+  padding: 1px 3px;
+  margin: -1px -3px;
+  min-width: 0;
+  -webkit-text-stroke: 3px #000;
+  paint-order: stroke fill;
+}
+
+.console {
+  flex: 1 1 auto;
+  color: var(--ra-console-color, #f1f1f1);
+  font-size: var(--ra-console-size, 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress {
+  flex: 0 0 auto;
+  max-width: 100%;
+  color: var(--ra-progress-color, #ffffff);
+  font-size: var(--ra-progress-size, 20px);
+  text-align: right;
+  white-space: nowrap;
+}
+.console.aesthetic-hidden + .progress {
+  text-align: left;
+}
+
+.unlocks {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.unlocks-heading {
+  flex: 0 0 auto;
+  margin: 0 0 6px;
+  padding: 2px 3px;
+  color: var(--ra-sectionHeading-color, #ffffff);
+  font-size: var(--ra-sectionHeading-size, 20px);
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-text-stroke: 3px #000;
+  paint-order: stroke fill;
+}
+
+.achievement-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: repeat(var(--visible-count, 3), minmax(64px, 1fr));
+  row-gap: 8px;
+}
+
+.achievement-card {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: center;
+  min-height: 64px;
+  overflow: hidden;
+}
+.achievement-card[hidden] { display: none; }
+
+.badge {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  min-height: 64px;
+  max-width: 64px;
+  max-height: 64px;
+  object-fit: contain;
+  border: 2px solid var(--ra-achievementIconBorder-color, #ffffff);
+  background: transparent;
+}
+
+.achievement-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding: 2px 3px;
+  overflow: hidden;
+}
+
+.achievement-title-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.achievement-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 2px 3px;
+  margin: -2px -3px;
+  color: var(--ra-achievementTitle-color, #ffffff);
+  font-size: var(--ra-achievementTitle-size, 24px);
+  font-weight: 700;
+  line-height: 1.22;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-text-stroke: 4px #000;
+  paint-order: stroke fill;
+}
+
+.achievement-points {
+  flex: 0 0 auto;
+  padding: 2px 3px;
+  margin: -2px -3px;
+  color: var(--ra-achievementPoints-color, #ffffff);
+  font-size: var(--ra-achievementPoints-size, 24px);
+  font-weight: 700;
+  line-height: 1.22;
+  white-space: nowrap;
+  -webkit-text-stroke: 4px #000;
+  paint-order: stroke fill;
+}
+
+.achievement-description {
+  color: var(--ra-achievementDescription-color, #ededed);
+  font-size: var(--ra-achievementDescription-size, 18px);
+  font-weight: 400;
+  line-height: 1.32;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  -webkit-text-stroke: 2px #000;
+  paint-order: stroke fill;
+}
+
+.achievement-card.desc-one-line .achievement-description {
+  -webkit-line-clamp: 1;
+}
+
+.empty-state {
+  flex: 0 0 auto;
+  margin-top: 8px;
+  padding: 2px 3px;
+  color: #ededed;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+  -webkit-text-stroke: 3px #000;
+  paint-order: stroke fill;
+}
+
+/* Visibility toggles */
+.aesthetic-hidden { display: none !important; }
+.game-header.without-icon .game-info { min-height: auto; }
+.achievement-card.without-badge { grid-template-columns: minmax(0, 1fr); }
+
+/* Preview mode: shown only inside the settings iframe (?preview=1).
+   Never applied inside OBS, so OBS keeps a fully transparent page.
+   Matching color-scheme: dark prevents Chromium/WebView2 from painting
+   an opaque white backdrop behind the transparent iframe. */
+html.preview {
+  color-scheme: dark;
+  background: transparent !important;
+}
+html.preview body {
+  background: transparent !important;
+}

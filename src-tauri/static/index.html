@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>RetroAchievements Overlay</title>
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="overlay">
+    <header class="game-header">
+      <img id="game-icon" class="game-icon" alt="" hidden>
+      <div class="game-info">
+        <div id="game-title" class="game-title">Waiting for RetroAchievements</div>
+        <div class="game-meta">
+          <div id="console" class="console"></div>
+          <div id="progress" class="progress"></div>
+        </div>
+      </div>
+    </header>
+    <section class="unlocks">
+      <h2 id="unlocks-heading" class="unlocks-heading"></h2>
+      <div id="achievement-list" class="achievement-list"></div>
+      <div id="empty-state" class="empty-state" hidden></div>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

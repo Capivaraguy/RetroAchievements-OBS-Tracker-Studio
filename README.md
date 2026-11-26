@@ -1,73 +1,49 @@
 # RetroAchievements OBS Tracker Studio
 
-This is an Electron wrapper for RetroAchievements OBS Tracker Studio v1.0.2, a tracker tool for Retroachievements games that you're currently playing to show on your stream.
+A lightweight Windows desktop app (Rust + Tauri) that exposes a customizable, transparent RetroAchievements overlay URL for OBS Browser Source.
 
-It's completely local and meant to use the OBS Browser overlay source.
+## Features
 
-[image1.png]
+- **Automatic or Fixed Game Tracking:** Tracks your most recently played RetroAchievements game automatically, or pins a specific game ID / URL or subset URL (`?set=...`).
+- **Latest or Next Mode:** Show your latest unlocked achievements or the next achievements to unlock (Hardcore or Softcore).
+- **Live Aesthetics & Scaled Preview:** Customize font family, per-element sizes, colors, borders, visibility toggles, and exact OBS overlay dimensions with a live transparent-checkerboard preview.
+- **System Tray & Windows Startup:** Option to minimize to the system tray on close and launch automatically minimized to the tray when Windows starts.
 
-[image2.png]
+## Download & Setup (OBS)
 
-## For users
+1. Download the latest `*-setup.exe` installer (or portable `ra-obs-tracker.exe`) from **Releases**.
+2. Launch **RetroAchievements OBS Tracker Studio**.
+3. Enter your RetroAchievements **Username** and **Web API Key** (from [retroachievements.org/settings](https://retroachievements.org/settings)), configure your display/aesthetics, and click **Save & test connection**.
+4. Copy the **Browser Source URL** (usually `http://127.0.0.1:8765/`).
+5. In OBS Studio: **Sources → + → Browser**, paste the URL, and set **Width** and **Height** to match your configured **Overlay size**.
+6. Keep the Studio app running (or minimized in the system tray) while streaming.
 
-1. Download `RetroAchievements-OBS-Tracker-Studio-Setup-1.0.2.exe` from **GitHub → Releases**.
-2. Run the installer.
-3. Launch **RetroAchievements OBS Tracker Studio** from the Start Menu or desktop shortcut.
-4. Enter your RetroAchievements username and Web API key, configure the display, and use **Save & test connection**.
-5. In OBS, add a **Browser Source** with URL `http://127.0.0.1:8765/`. Set its width and height to match the Studio preview.
+## Building from Source (Windows)
 
-Keep Tracker Studio open while OBS uses the overlay. Closing Tracker Studio stops its local server.
+Requirements:
+- [Rust toolchain](https://rustup.rs/)
+- Tauri CLI v2:
+  ```powershell
+  cargo install tauri-cli --version "^2"
+  ```
+- Microsoft Edge WebView2 Runtime (preinstalled on Windows 10/11)
 
-## Build the Windows installer
+Run:
+```bat
+build.bat
+```
+This outputs:
+- Installer: `src-tauri\target\release\bundle\nsis\...setup.exe`
+- MSI: `src-tauri\target\release\bundle\msi\...msi`
+- Portable executable: `src-tauri\target\release\ra-obs-tracker.exe`
 
-Requirements: Windows 10/11, Node.js 22 or newer, and npm.
+## Creating a GitHub Release
+
+Push a version tag matching `v*` to trigger the GitHub Actions workflow in `.github/workflows/release.yml`:
 
 ```powershell
-npm install
-npm run dist
+git tag v0.1.0
+git push origin v0.1.0
 ```
 
-The installer is written to `dist/`.
-
-For local development:
-
-```powershell
-npm start
-```
-
-## Publish on GitHub
-
-1. Create a GitHub repository and push this project.
-2. Create and push a version tag:
-
-```bash
-git tag v1.0.2
-git push origin v1.0.2
-```
-
-3. The included GitHub Actions workflow builds the Windows x64 installer and attaches it to a GitHub Release. You can also run the workflow manually from the Actions tab; that produces a downloadable workflow artifact.
-
-## Data and privacy
-
-- The RetroAchievements API key is stored in the current Windows user's application data directory, not in the installation folder or repository.
-- The repository includes only `config.example.json`, with blank credentials.
-- The app contacts RetroAchievements services when configured to retrieve game and achievement information.
-- The local overlay server listens on `127.0.0.1:8765`; it is not intended to be exposed to the public network.
-- Uninstalling the application does not delete the saved configuration.
-
-## Compatibility notes
-
-- Windows x64 installer.
-- OBS continues to consume the overlay through its Browser Source / embedded Chromium browser.
-- The application still uses Windows PowerShell internally for its local API/server implementation, but users do not need to open a terminal or run a script manually.
-- Port 8765 must be available. If another process is already using it, close that process before starting Tracker Studio.
-
-## Project structure
-
-- `main.js` — Electron desktop lifecycle and hidden server management.
-- `tracker/` — original overlay, settings UI, API logic, and PowerShell server.
-- `.github/workflows/windows-release.yml` — automated Windows installer and GitHub Release build.
-
-## License
-
-MIT. See [LICENSE](LICENSE).
+GitHub Actions will compile the release on `windows-latest` and attach the NSIS installer, MSI, and portable `ra-obs-tracker.exe` to a draft release under **Releases**.

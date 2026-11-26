@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="dark">
+  <title>RetroAchievements OBS Tracker Studio</title>
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="stylesheet" href="/settings.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <img class="brand" src="/icon.png" alt="RetroAchievements OBS Tracker Studio">
+      <div class="brand-copy">
+        <h1>RetroAchievements OBS Tracker Studio</h1>
+        <p>Rust + Tauri build</p>
+      </div>
+      <a class="top-link" href="/" target="_blank" rel="noopener">Open overlay ↗</a>
+    </header>
+
+    <main class="layout">
+      <section class="main-col">
+        <form id="settings-form" novalidate>
+
+          <section class="panel">
+            <h2>1. Account</h2>
+            <label for="username">Username</label>
+            <input id="username" autocomplete="username" required>
+
+            <div class="label-row">
+              <label for="api-key">Web API key</label>
+              <a href="https://retroachievements.org/settings" target="_blank" rel="noopener">Get key ↗</a>
+            </div>
+            <div class="password-wrap">
+              <input id="api-key" type="password" autocomplete="new-password" placeholder="Paste key (blank keeps saved key)">
+              <button id="toggle-key" type="button" class="ghost">Show</button>
+            </div>
+            <p id="key-note" class="note">No key saved.</p>
+
+            <label for="achievement-mode" style="margin-top: 12px;">Achievement mode</label>
+            <select id="achievement-mode">
+              <option value="hardcore">Hardcore</option>
+              <option value="softcore">Softcore</option>
+            </select>
+          </section>
+
+          <section class="panel">
+            <h2>2. Display mode</h2>
+            <div class="choice-grid">
+              <label class="choice-card">
+                <input type="radio" name="display-mode" value="latest" checked>
+                <span class="mark">✓</span><span>Latest unlocked</span>
+              </label>
+              <label class="choice-card">
+                <input type="radio" name="display-mode" value="next">
+                <span class="mark">→</span><span>Next to unlock</span>
+              </label>
+            </div>
+
+            <div id="latest-count-wrap">
+              <label for="latest-count">Latest achievements to show</label>
+              <select id="latest-count">
+                <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
+              </select>
+            </div>
+            <div id="next-count-wrap" hidden>
+              <label for="next-count">Next achievements to show</label>
+              <select id="next-count">
+                <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
+              </select>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2>3. Game selection</h2>
+            <div class="segmented">
+              <label><input type="radio" name="game-selection" value="automatic" checked><span>Automatic</span></label>
+              <label><input type="radio" name="game-selection" value="fixed"><span>Fixed game / subset</span></label>
+            </div>
+            <div id="fixed-game-wrap" hidden>
+              <label for="fixed-game-id">Game ID, game URL, or subset URL</label>
+              <input id="fixed-game-id" placeholder="2664  ·  /game/2664  ·  /game/2664?set=7940">
+              <p class="note">
+                <strong>Plain game:</strong> <code>2664</code> or <code>https://retroachievements.org/game/2664</code><br>
+                <strong>Subset:</strong> paste the subset page URL, e.g. <code>https://retroachievements.org/game/2664?set=7940</code>
+              </p>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="heading-row">
+              <h2>4. Aesthetics</h2>
+              <button id="reset-aesthetics" type="button" class="ghost small">Reset defaults</button>
+            </div>
+            <label for="font-family">Overall font</label>
+            <select id="font-family">
+              <option value="Arial, Helvetica, sans-serif">Arial</option>
+              <option value="Impact, sans-serif">Impact</option>
+              <option value="Verdana, Geneva, sans-serif">Verdana</option>
+              <option value="Tahoma, Geneva, sans-serif">Tahoma</option>
+              <option value="Trebuchet MS, Arial, sans-serif">Trebuchet MS</option>
+              <option value="Georgia, Times New Roman, serif">Georgia</option>
+              <option value="Courier New, Courier, monospace">Courier New</option>
+              <option value="Segoe UI, Arial, sans-serif">Segoe UI</option>
+            </select>
+            <div id="aesthetic-grid" class="aesthetic-grid"></div>
+            <div class="section-divider">
+              <h3>Icon borders & visibility</h3>
+              <div id="border-grid" class="aesthetic-grid"></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2>5. App &amp; tray</h2>
+            <div class="check-stack">
+              <label class="check-row">
+                <input id="minimize-to-tray" type="checkbox" checked>
+                <span>
+                  <strong>Close to system tray</strong>
+                  <small>Keep the tracker running in the tray icon when closing this window.</small>
+                </span>
+              </label>
+              <label class="check-row">
+                <input id="start-with-windows" type="checkbox">
+                <span>
+                  <strong>Start with Windows (minimized to tray)</strong>
+                  <small>Launch automatically on Windows sign-in, minimized in the system tray.</small>
+                </span>
+              </label>
+            </div>
+            <p id="app-options-status" class="note"></p>
+          </section>
+
+          <div class="actions">
+            <button id="save-btn" type="submit" class="primary">Save &amp; test connection</button>
+            <span id="status" class="status"></span>
+          </div>
+        </form>
+
+        <section class="panel">
+          <h2>6. OBS</h2>
+          <label for="obs-url">Browser Source URL</label>
+          <div class="copy-row">
+            <input id="obs-url" readonly>
+            <button id="copy-url" type="button" class="ghost">Copy</button>
+          </div>
+          <p class="note">In OBS: <strong>Sources → + → Browser</strong>, paste this URL, keep Studio running.</p>
+        </section>
+      </section>
+
+      <aside class="side-col">
+        <section class="panel preview-size-panel">
+          <h2>Overlay size</h2>
+          <div class="two-col">
+            <div>
+              <label for="overlay-width">Width (px)</label>
+              <input id="overlay-width" form="settings-form" type="number" min="280" max="1920" value="480">
+            </div>
+            <div>
+              <label for="overlay-height">Height (px)</label>
+              <input id="overlay-height" form="settings-form" type="number" min="200" max="1200" value="430">
+            </div>
+          </div>
+          <p class="note">Set the same size in OBS Browser Source Properties for an exact match.</p>
+        </section>
+
+        <section class="preview-panel">
+          <div class="preview-head">
+            <h3>Preview</h3>
+            <span id="preview-size" class="preview-size">480 × 430 px</span>
+          </div>
+          <div id="preview-viewport" class="preview-viewport">
+            <div id="preview-shell" class="preview-shell">
+              <iframe id="preview-iframe" src="/?preview=1" title="Overlay preview" scrolling="no"></iframe>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+  <script src="/settings.js"></script>
+</body>
+</html>
