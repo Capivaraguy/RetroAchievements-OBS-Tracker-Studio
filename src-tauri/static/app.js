@@ -79,7 +79,6 @@ function fitFontSize(el, baseSize, minSize, fitsFn) {
 }
 
 function resetCardLayout(card, a) {
-  card.classList.remove('desc-one-line');
   const titleEl = card.querySelector('.achievement-title');
   const pointsEl = card.querySelector('.achievement-points');
   const descEl = card.querySelector('.achievement-description');
@@ -146,57 +145,20 @@ function fitLayout() {
   }
 
   // 4. Fit each visible achievement card:
-  //    - Shrink title horizontally if needed so characters aren't cut off
-  //    - Drop description from 2 lines -> 1 line before vertical clipping occurs
-  //    - If even 1 line overflows vertically, scale card fonts down so nothing clips
+  //    - Title: always 1 line, fixed font size (CSS ellipsis handles overflow — no JS shrinking)
+  //    - Description: always 2 lines, shrink font down to (baseSize - 2) if it overflows
   for (const card of visibleCards) {
     const copyEl = card.querySelector('.achievement-copy');
-    const titleEl = card.querySelector('.achievement-title');
-    const pointsEl = card.querySelector('.achievement-points');
     const descEl = card.querySelector('.achievement-description');
     const maxH = card.clientHeight;
     if (maxH <= 0) continue;
 
-    // Fit title horizontally without cutting off characters
-    if (a.achievementTitle.enabled && titleEl.textContent) {
-      fitFontSize(titleEl, a.achievementTitle.size, 11, () => titleEl.scrollWidth <= titleEl.clientWidth + 1);
-    }
-
+    // Description: shrink up to 2px below chosen size to keep 2 lines without clipping
     const descVisible = descEl.style.display !== 'none';
-    if (descVisible && copyEl.scrollHeight > maxH + 1) {
-      // Drop from 2-line to 1-line before cutting off text vertically
-      card.classList.add('desc-one-line');
-    }
-
-    // If still too tall vertically (even at 1 line), scale down card fonts smoothly
-    if (copyEl.scrollHeight > maxH + 1) {
-      let curTitle = parseFloat(titleEl.style.fontSize) || a.achievementTitle.size;
-      let curPoints = parseFloat(pointsEl.style.fontSize) || a.achievementPoints.size;
-      let curDesc = parseFloat(descEl.style.fontSize) || a.achievementDescription.size;
-
-      for (let step = 0; step < 12; step++) {
-        if (copyEl.scrollHeight <= maxH + 1) break;
-        const nextTitle = Math.max(10, Math.floor(curTitle * 0.88));
-        const nextPoints = Math.max(10, Math.floor(curPoints * 0.88));
-        const nextDesc = Math.max(9, Math.floor(curDesc * 0.86));
-        if (nextTitle === curTitle && nextPoints === curPoints && nextDesc === curDesc) break;
-        curTitle = nextTitle;
-        curPoints = nextPoints;
-        curDesc = nextDesc;
-        titleEl.style.fontSize = `${curTitle}px`;
-        pointsEl.style.fontSize = `${curPoints}px`;
-        descEl.style.fontSize = `${curDesc}px`;
-      }
-
-      // Re-check horizontal fit if title grew relatively or font changed
-      if (a.achievementTitle.enabled && titleEl.textContent && titleEl.scrollWidth > titleEl.clientWidth + 1) {
-        fitFontSize(titleEl, curTitle, 10, () => titleEl.scrollWidth <= titleEl.clientWidth + 1);
-      }
-
-      // Last-resort guard on extremely small heights: hide description rather than clipping glyphs
-      if (descVisible && copyEl.scrollHeight > maxH + 1) {
-        descEl.style.display = 'none';
-      }
+    if (descVisible && a.achievementDescription.enabled) {
+      const baseDescSize = a.achievementDescription.size;
+      const minDescSize = baseDescSize - 2;
+      fitFontSize(descEl, baseDescSize, minDescSize, () => copyEl.scrollHeight <= maxH + 1);
     }
   }
 }
