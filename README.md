@@ -2,6 +2,10 @@
 
 A lightweight Windows desktop app (Rust + Tauri) that exposes a customizable, transparent RetroAchievements overlay URL for OBS Browser Source.
 
+![Demonstration-1](RA-Tracker-01.png)
+
+![Demonstration-2](RA-Tracker-02.png)
+
 ## Features
 
 - **Automatic or Fixed Game Tracking:** Tracks your most recently played RetroAchievements game automatically, or pins a specific game ID / URL or subset URL (`?set=...`).
