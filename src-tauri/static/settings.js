@@ -442,6 +442,29 @@ $('preview-iframe').addEventListener('load', () => {
   updatePreviewLive();
 });
 
+// Keep preview in sync with live data: poll /api/data every 15s and
+// nudge the iframe to refresh whenever something changes.
+let _previewPollLastGame = null;
+let _previewPollTimer = null;
+async function pollPreviewData() {
+  try {
+    const r = await fetch('/api/data', { cache: 'no-store' });
+    if (r.ok) {
+      const data = await r.json();
+      const gameKey = `${data.game?.id ?? ''}:${data.game?.title ?? ''}`;
+      if (gameKey !== _previewPollLastGame) {
+        _previewPollLastGame = gameKey;
+        const frame = $('preview-iframe');
+        if (frame && frame.contentWindow) {
+          frame.contentWindow.postMessage({ type: 'ra-overlay-refresh' }, window.location.origin);
+        }
+      }
+    }
+  } catch (_) {}
+  _previewPollTimer = setTimeout(pollPreviewData, 15_000);
+}
+pollPreviewData();
+
 window.addEventListener('resize', fitPreview);
 
 loadConfig();

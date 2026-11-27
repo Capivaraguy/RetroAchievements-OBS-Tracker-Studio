@@ -332,13 +332,19 @@ function schedule() {
 
 window.addEventListener('message', (event) => {
   if (event.origin !== window.location.origin) return;
-  if (!event.data || event.data.type !== 'ra-overlay-aesthetics-preview') return;
-  state.override = event.data.aesthetics || null;
-  state.previewOptions = event.data.previewOptions || null;
-  if (state.data) {
-    render();
-  } else {
-    applyAesthetics(state.override || {});
+  if (!event.data) return;
+  if (event.data.type === 'ra-overlay-aesthetics-preview') {
+    state.override = event.data.aesthetics || null;
+    state.previewOptions = event.data.previewOptions || null;
+    if (state.data) {
+      render();
+    } else {
+      applyAesthetics(state.override || {});
+    }
+  } else if (event.data.type === 'ra-overlay-refresh') {
+    // Settings page requesting a data refresh (keeps preview in sync)
+    if (state.timer) clearTimeout(state.timer);
+    refresh();
   }
 });
 
